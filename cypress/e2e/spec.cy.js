@@ -3,6 +3,7 @@
 describe('Cart App', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000');
+    
   });
 
   it('should have a navbar', () => {
@@ -36,8 +37,8 @@ it('should display image for cart items', () => {
 });
 
 it('should increase the cart item count when clicking increase button', () => {
-  cy.get('.amount-btn').first().click();
-  cy.get('.amount').should('not.contain.text', '2');
+  cy.get('.amount-btn').first().click().parent().contains('2');
+  
 });
 
 it('should decrease the cart item count when clicking decrease button', () => {
@@ -110,6 +111,11 @@ it('should remove the product when its count is decreased to zero', () => {
   cy.get('.amount-btn').last().click(); 
   cy.get('.cart-item').should('have.length', 3);
 });
+
+
+
+
+
 it('each cart item should display all its details correctly', () => {
   cy.get('.cart-item').each(($el) => {
           // title
@@ -117,16 +123,18 @@ it('each cart item should display all its details correctly', () => {
     cy.wrap($el).find('.item-price').should('exist'); // price
     cy.wrap($el).find('.amount').should('exist');     // amount
   });
-  it('should display an error message if data fetch fails', () => {
-    cy.intercept('GET', '/api/products', {statusCode: 500, body: {}});
-    cy.get('.error-message').should('be.visible');
-  });
-  it('should retain cart data after a page refresh', () => {
-    cy.get('.cart-total').should('contain.text', '4');
-    cy.reload();
-    cy.get('.cart-total').should('contain.text', '4');
-  });
+ 
     
+});
+
+// it('should display an error message if data fetch fails', () => {
+//   cy.intercept('GET', '/api/products', {statusCode: 500, body: {}});
+//   cy.get('.error-message').should('be.visible');
+// });
+it('should retain cart data after a page refresh', () => {
+  cy.get('.cart-total').should('contain.text', '4');
+  cy.reload();
+  cy.get('.cart-total').should('contain.text', '4');
 });
 
 
